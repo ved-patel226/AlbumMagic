@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Now Playing</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        img { width: 300px; }
+    </style>
+</head>
+<body>
+    <h1>Currently Playing</h1>
+    <div id="track-info">
+        <img id="cover" src="" alt="Album Cover">
+        <h2 id="track-name"></h2>
+        <h3 id="artist-name"></h3>
+        <p id="album-name"></p>
+        <p>Progress: <span id="progress"></span> / <span id="duration"></span></p>
+    </div>
+    <script>
+        async function fetchTrack() {
+            const response = await fetch('/current-track');
+            const data = await response.json();
+            if (data.error) {
+                document.getElementById('track-info').innerHTML = data.error;
+            } else {
+                document.getElementById('cover').src = data.cover_url;
+                document.getElementById('track-name').innerText = data.track_name;
+                document.getElementById('artist-name').innerText = data.artist_name;
+                document.getElementById('album-name').innerText = data.album_name;
+                
+                const progress = Math.floor(data.progress_ms / 1000);
+                const duration = Math.floor(data.duration_ms / 1000);
+                document.getElementById('progress').innerText = progress + 's';
+                document.getElementById('duration').innerText = duration + 's';
+            }
+        }
+
+        setInterval(fetchTrack, 1000);  // Refresh every second
+        fetchTrack();  // Initial fetch
+    </script>
+</body>
+</html>
