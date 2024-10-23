@@ -4,41 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spotify Now Playing</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
-        img { width: 300px; }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/background.css') }}">
 </head>
 <body>
-    <h1>Currently Playing</h1>
-    <div id="track-info">
-        <img id="cover" src="" alt="Album Cover">
-        <h2 id="track-name"></h2>
-        <h3 id="artist-name"></h3>
-        <p id="album-name"></p>
-        <p>Progress: <span id="progress"></span> / <span id="duration"></span></p>
-    </div>
-    <script>
-        async function fetchTrack() {
-            const response = await fetch('/current-track');
-            const data = await response.json();
-            if (data.error) {
-                document.getElementById('track-info').innerHTML = data.error;
-            } else {
-                document.getElementById('cover').src = data.cover_url;
-                document.getElementById('track-name').innerText = data.track_name;
-                document.getElementById('artist-name').innerText = data.artist_name;
-                document.getElementById('album-name').innerText = data.album_name;
-                
-                const progress = Math.floor(data.progress_ms / 1000);
-                const duration = Math.floor(data.duration_ms / 1000);
-                document.getElementById('progress').innerText = progress + 's';
-                document.getElementById('duration').innerText = duration + 's';
-            }
-        }
+    <div id="center">
+        <div id="track-info">
+            <a class="cover-container" id="pause-play">
+                <img id="cover" src="" alt="Album Cover">
+                <svg class="pause-icon" id="pause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <rect x="6" y="4" width="4" height="16"></rect>
+                    <rect x="14" y="4" width="4" height="16"></rect>
+                </svg>
 
-        setInterval(fetchTrack, 1000);  // Refresh every second
-        fetchTrack();  // Initial fetch
-    </script>
-</body>
+                <svg class="pause-icon" id="play" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            </a>
+
+            <div class="text">
+                <h2 id="track-name"></h2>
+                <h3 id="artist-name"></h3>
+                <p id="album-name"></p>
+                <div id="current-track-id" style="display:none;"></div> <!-- Add this line -->
+
+            </div>
+
+            <div class="actions">
+                <a class="left" id="prev-link">
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-player-track-prev"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M20.341 4.247l-8 7a1 1 0 0 0 0 1.506l8 7c.647 .565 1.659 .106 1.659 -.753v-14c0 -.86 -1.012 -1.318 -1.659 -.753z" /><path d="M9.341 4.247l-8 7a1 1 0 0 0 0 1.506l8 7c.647 .565 1.659 .106 1.659 -.753v-14c0 -.86 -1.012 -1.318 -1.659 -.753z" /></svg>
+                </a>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <a class="right" id="next-link">
+                    <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="currentColor"  class="icon icon-tabler icons-tabler-filled icon-tabler-player-track-next"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M2 5v14c0 .86 1.012 1.318 1.659 .753l8 -7a1 1 0 0 0 0 -1.506l-8 -7c-.647 -.565 -1.659 -.106 -1.659 .753z" /><path d="M13 5v14c0 .86 1.012 1.318 1.659 .753l8 -7a1 1 0 0 0 0 -1.506l-8 -7c-.647 -.565 -1.659 -.106 -1.659 .753z" /></svg>
+                </a>  
+            </div>
+        </div>
+    </div>
+
+
+    <div class="background">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/spotify_actions.js') }}"></script>
+
+    </body>
 </html>
