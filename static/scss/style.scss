@@ -29,6 +29,8 @@ body {
     flex-direction: column;
     height: 100vh;
 
+    gap: 50px;
+
     #track-info {
         padding: 50px;
         backdrop-filter: blur(20px);
@@ -106,11 +108,13 @@ body {
 
             .left:hover {
                 transform: translateX(-5px);
+                scale: 1.1;
                 cursor: pointer;
             }
 
             .right:hover {
                 transform: translateX(5px);
+                scale: 1.1;
                 cursor: pointer;
             }
 
@@ -127,6 +131,13 @@ body {
                     transition: all ease 0.5s;
                 }
             }
+        }
+    }
+
+    #time {
+        h1 {
+            margin: 0;
+            font-size: 100px;
         }
     }
 }

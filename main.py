@@ -37,21 +37,22 @@ def callback():
 
 @app.route('/current-track')
 def current_track():
+    
+    
     if not is_authenticated():
         return jsonify({'error': 'User not authenticated.'}), 401
 
     current_playback = sp.current_playback()
     if current_playback is None:
         return jsonify({'error': 'No track is currently playing.'}), 204
-
+    
     track = current_playback['item']
     progress_ms = current_playback['progress_ms']
     duration_ms = track['duration_ms']
 
     colors = get_top_colors(track['album']['images'][0]['url'])
-    
 
-    
+
     return jsonify({
         'track_id': track['id'],
         'track_name': track['name'],
@@ -95,7 +96,6 @@ def pause_playback():
     except Exception as e:
         return redirect(url_for("resume_playback"))
 
-
 @app.route('/resume-playback')
 def resume_playback():
     if not is_authenticated():
@@ -130,7 +130,6 @@ def seek_track():
         return jsonify({'success': True})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 
 def is_authenticated():
     token_info = session.get('token_info')

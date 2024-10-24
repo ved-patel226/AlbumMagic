@@ -9,6 +9,9 @@
 </head>
 <body>
     <div id="center">
+        <div id="time">
+            <h1 id="current-time"></h1>
+        </div>
         <div id="track-info">
             <a class="cover-container" id="pause-play">
                 <img id="cover" src="" alt="Album Cover">
@@ -41,7 +44,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="background">
         <span></span>
@@ -83,7 +85,7 @@
     </div>
 
     <script type="module" src="{{ url_for('static', filename='js/index.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/spotify_actions.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/spotify_actions.js') }}"></script>
 
     </body>
 </html>

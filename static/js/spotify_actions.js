@@ -1,3 +1,6 @@
+import { fetchTrack } from './index.js';
+
+
 document.getElementById('prev-link').addEventListener('click', function(event) {
     event.preventDefault();
     fetch('/previous-track')
@@ -8,10 +11,10 @@ document.getElementById('prev-link').addEventListener('click', function(event) {
             return response.json();
         })
         .then(data => {
-            console.log(data);
+            fetchTrack(); 
         })
         .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
+            fetchTrack(); 
         });
 });
 
@@ -25,10 +28,10 @@ document.getElementById('next-link').addEventListener('click', function(event) {
             return response.json();
         })
         .then(data => {
-            console.log(data);
+            fetchTrack(); 
         })
         .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
+            fetchTrack(); 
         });
 });
 
@@ -41,9 +44,7 @@ document.getElementById('pause-play').addEventListener('click', function(event) 
             }
             return response.text();
         })
-        .then(data => {
-            console.log("Playback paused or played successfully");
-            
+        .then(data => {            
             const pauseElement = document.getElementById('pause');
             if (pauseElement) {
                 const computedStyle = window.getComputedStyle(pauseElement);
@@ -54,13 +55,11 @@ document.getElementById('pause-play').addEventListener('click', function(event) 
                     document.getElementById('play').style.display = 'block';
                     pauseElement.style.display = 'none';
                 }
-            } else {
-                console.error('Element with ID "pause" not found');
             }
+            fetchTrack(); 
         })
-        
         .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
+            console.log('There was a problem with the fetch operation:', error);
+            fetchTrack();
         });
 });
-

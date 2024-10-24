@@ -3,9 +3,10 @@ import { getCurrentTime } from './time.js';
 let previousTrackId = null;
 let isDragging = false;
 let fetchIntervalId = null;
+let fetchTimeoutId = null; 
 
-async function fetchTrack() {
-    if (isDragging) return; 
+export async function fetchTrack() {
+    if (isDragging) return;
 
     const response = await fetch('/current-track');
     const data = await response.json();
@@ -32,7 +33,8 @@ async function fetchTrack() {
         const percentage = (progress / duration) * 100;
         document.getElementById('progressBar').style.width = percentage + '%';
 
-        
+        document.getElementById('current-time').innerText = getCurrentTime();
+
         if (data.playback) {
             document.getElementById('play').style.display = 'none';
             document.getElementById('pause').style.display = 'block';
@@ -63,29 +65,31 @@ async function updateProgressBar(position) {
     });
 }
 
+function debounce(func, wait) {
+    return function(...args) {
+        clearTimeout(fetchTimeoutId);
+        fetchTimeoutId = setTimeout(() => func.apply(this, args), wait);
+    };
+}
+
 document.querySelector('.progress-container').addEventListener('mousedown', (event) => {
-    isDragging = true; 
+    isDragging = true;
     const progressContainer = event.currentTarget;
     const position = event.clientX - progressContainer.getBoundingClientRect().left;
     updateProgressBar(position);
-
-    
     clearInterval(fetchIntervalId);
 });
 
-
-document.addEventListener('mousemove', (event) => {
+document.addEventListener('mousemove', debounce((event) => {
     if (isDragging) {
         const progressContainer = document.querySelector('.progress-container');
         const position = event.clientX - progressContainer.getBoundingClientRect().left;
         updateProgressBar(position);
     }
-});
+}, 100)); 
 
 document.addEventListener('mouseup', () => {
     isDragging = false;
-
-    fetchIntervalId = setInterval(fetchTrack, 1000);
 });
 
 fetchIntervalId = setInterval(fetchTrack, 1000);
