@@ -10,11 +10,11 @@ from py_tools import *
 app = Flask(__name__)
 app.secret_key = env_to_var('FLASK_SECRET_KEY')
 
-
 client_id = env_to_var('CLIENT_ID')
 client_secret = env_to_var('CLIENT_SECRET')
 redirect_uri = os.getenv('REDIRECT_URI')
-print(redirect_uri)
+
+print(request.url)
 scope = 'user-modify-playback-state user-read-playback-state'
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
                                                client_secret=client_secret,
