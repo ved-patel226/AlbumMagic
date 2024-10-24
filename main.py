@@ -12,9 +12,9 @@ app.secret_key = env_to_var('FLASK_SECRET_KEY')
 
 client_id = env_to_var('CLIENT_ID')
 client_secret = env_to_var('CLIENT_SECRET')
-redirect_uri = os.getenv('REDIRECT_URI')
+redirect_uri = f"{request.url}/callback"
 
-print(request.url)
+print(redirect_uri)
 scope = 'user-modify-playback-state user-read-playback-state'
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
                                                client_secret=client_secret,
