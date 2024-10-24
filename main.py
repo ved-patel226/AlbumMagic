@@ -52,7 +52,6 @@ def current_track():
 
     colors = get_top_colors(track['album']['images'][0]['url'])
 
-
     return jsonify({
         'track_id': track['id'],
         'track_name': track['name'],
