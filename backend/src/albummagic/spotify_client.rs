@@ -14,12 +14,12 @@ pub async fn get_spotify_client() -> Result<AuthCodeSpotify, Box<dyn std::error:
     let spotify = AuthCodeSpotify::new(creds, oauth);
 
     // Try to load cached token
+    //TODO - Convert to cookies if frontend is deployed
     if Path::new(TOKEN_CACHE_FILE).exists() {
         let token_data = fs::read_to_string(TOKEN_CACHE_FILE)?;
         if let Ok(token) = serde_json::from_str(&token_data) {
             *spotify.token.lock().await.unwrap() = Some(token);
 
-            // Test if the token is still valid by making a simple API call
             if spotify.current_user().await.is_ok() {
                 println!("Using cached authentication token");
                 return Ok(spotify);
@@ -38,10 +38,10 @@ pub async fn get_spotify_client() -> Result<AuthCodeSpotify, Box<dyn std::error:
     std::io::stdin().read_line(&mut code)?;
     let code = code.trim();
 
-    // Request the access token
     spotify.request_token(code).await?;
 
     // Cache the token
+    //TODO - Convert to cookies if frontend is deployed
     if let Some(token) = spotify.token.lock().await.unwrap().as_ref() {
         let token_json = serde_json::to_string_pretty(token)?;
         fs::write(TOKEN_CACHE_FILE, token_json)?;

@@ -24,7 +24,7 @@ pub async fn get_current_track(spotify: &AuthCodeSpotify) -> Result<CurrentTrack
                         album_cover_url: track.album.images
                             .first()
                             .map(|img| img.url.clone())
-                            .unwrap_or_default(),
+                            .unwrap_or_default(), // NOT type image::DynamicImage, will do that in frontend
                         artists: track.artists
                             .iter()
                             .map(|a| a.name.clone())
