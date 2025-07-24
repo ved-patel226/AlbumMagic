@@ -1,0 +1,11 @@
+/target
+
+# IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+
+# Spotify token cache
+.spotify_token_cache.json
