@@ -1,9 +1,9 @@
 use axum::{ extract::State, http::StatusCode, response::Json, routing::{ get, post }, Router };
+use rspotify::prelude::*;
 use serde::{ Deserialize, Serialize };
 use std::sync::Arc;
 use tokio::sync::Mutex;
 use tower_http::cors::CorsLayer;
-use axum::extract::Query;
 
 use crate::albummagic::{ player::get_current_track, spotify_client::SpotifyClientManager };
 
@@ -30,13 +30,21 @@ pub struct ErrorResponse {
     pub error: String,
 }
 
+#[derive(Serialize)]
+pub struct AuthCheckResponse {
+    pub authenticated: bool,
+    pub user_info: Option<String>,
+}
+
 pub type AppState = Arc<Mutex<SpotifyClientManager>>;
 
 pub fn create_app(spotify_manager: AppState) -> Router {
     Router::new()
         .route("/auth/url", get(get_auth_url))
         .route("/auth/callback", post(handle_callback))
+        .route("/auth/check", get(check_auth))
         .route("/current-song", get(get_current_song))
+
         .with_state(spotify_manager)
         .layer(CorsLayer::permissive())
 }
@@ -59,6 +67,41 @@ async fn get_auth_url(State(spotify_manager): State<AppState>) -> Result<
     }
 }
 
+async fn check_auth(State(spotify_manager): State<AppState>) -> Result<
+    Json<AuthCheckResponse>,
+    (StatusCode, Json<ErrorResponse>)
+> {
+    let manager = spotify_manager.lock().await;
+
+    match manager.get_client().await {
+        Some(client) => {
+            match client.current_user().await {
+                Ok(user) =>
+                    Ok(
+                        Json(AuthCheckResponse {
+                            authenticated: true,
+                            user_info: Some(user.display_name.unwrap_or(user.id.to_string())),
+                        })
+                    ),
+                Err(_) =>
+                    Ok(
+                        Json(AuthCheckResponse {
+                            authenticated: false,
+                            user_info: None,
+                        })
+                    ),
+            }
+        }
+        _ =>
+            Ok(
+                Json(AuthCheckResponse {
+                    authenticated: false,
+                    user_info: None,
+                })
+            ),
+    }
+}
+
 async fn get_current_song(State(spotify_manager): State<AppState>) -> Result<
     Json<crate::albummagic::player::CurrentTrack>,
     (StatusCode, Json<ErrorResponse>)
@@ -78,7 +121,7 @@ async fn get_current_song(State(spotify_manager): State<AppState>) -> Result<
                     )),
             }
         }
-        None =>
+        _ =>
             Err((
                 StatusCode::UNAUTHORIZED,
                 Json(ErrorResponse {
