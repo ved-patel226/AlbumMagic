@@ -1,5 +1,15 @@
 # Album Magic
 
+## Prerequisites
+
+Before installing, ensure you have the following installed on your system:
+
+- [Rust](https://www.rust-lang.org/tools/install)
+- [Node.js](https://nodejs.org/) (v16 or higher recommended)
+- [npm](https://www.npmjs.com/)
+
+You will also need a [Spotify Developer Account](https://developer.spotify.com/dashboard/) to obtain API credentials.
+
 ### Installation:
 
 Installing project on local computer:
@@ -7,6 +17,13 @@ Installing project on local computer:
 ```bash
 git clone https://github.com/ved-patel226/AlbumMagic.git
 cd AlbumMagic
+```
+
+Filling Spotify Secrets:
+
+```bash
+cp .env.sample .env
+
 ```
 
 Starting backend (rust):
