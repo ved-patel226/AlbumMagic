@@ -15,3 +15,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Prevent scrolling */
+html, body {
+  overflow: hidden;
+  height: 100%;
+}

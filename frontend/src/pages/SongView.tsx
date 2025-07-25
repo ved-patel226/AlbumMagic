@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { FaFastBackward, FaFastForward } from "react-icons/fa";
 
 export default function SongView() {
   type SongInfo = {
@@ -12,6 +13,8 @@ export default function SongView() {
   };
 
   const [songInfo, setSongInfo] = useState<SongInfo | null>(null);
+  const [mouseX, setMouseX] = useState<number>(0);
+  const [showControls, setShowControls] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchSong = () => {
@@ -37,23 +40,69 @@ export default function SongView() {
     return () => clearInterval(interval);
   }, []);
 
-  return (
-    <div className="flex items-center justify-center h-screen">
-      {songInfo ? (
-        <div className="text-center">
-          <div className="flex flex-col items-center justify-center mb-6 perspective-dramatic">
-            <img
-              src={songInfo.album_cover_url}
-              alt={`${songInfo.track_name} cover`}
-              className="w-50vh  rounded-lg object-cover -rotate-y-[-5deg] mb-5"
-            />
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMouseX(e.clientX);
+      setShowControls(true);
+    };
 
-            <h1 className="text-4xl font-bold mb-4 -rotate-y-[-5deg]">
-              {songInfo.track_name}
-            </h1>
-            <p className="text-xl -rotate-y-[-5deg]">
-              {songInfo.artists.join(", ")}
-            </p>
+    const handleMouseLeave = () => {
+      setShowControls(false);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, []);
+
+  const screenWidth = window.innerWidth;
+  const leftBoundary = screenWidth * 0.375; // 37.5% (50% - 12.5%)
+  const rightBoundary = screenWidth * 0.625; // 62.5% (50% + 12.5%)
+  const isLeftSide = mouseX < leftBoundary;
+  const isRightSide = mouseX > rightBoundary;
+
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      {songInfo ? (
+        <div className="text-center flex flex-row items-center justify-between w-full h-[100vh]">
+          {/* Left side control */}
+          <div
+            className={`pr-15 h-full w-full flex items-center justify-end transition-opacity duration-200 ${
+              showControls && isLeftSide ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <FaFastBackward className="text-4xl text-white opacity-70 hover:opacity-100 cursor-pointer" />
+          </div>
+
+          <div className="flex flex-col items-center justify-center perspective-dramatic">
+            <div className="relative mb-5 w-[50vh]">
+              <img
+                src={songInfo.album_cover_url}
+                alt={`${songInfo.track_name} cover`}
+                className="z-10 w-full rounded-lg object-cover relative"
+              />
+              <img
+                src={songInfo.album_cover_url}
+                className="z-0 absolute top-0 left-0 w-full h-full rounded-lg object-cover blur-[100vh] brightness-[400%] saturate-200 pointer-events-none"
+                aria-hidden="true"
+              />
+            </div>
+
+            <h1 className="text-4xl font-bold mb-4">{songInfo.track_name}</h1>
+            <p className="text-xl">{songInfo.artists.join(", ")}</p>
+          </div>
+
+          {/* Right side control */}
+          <div
+            className={`pl-15 h-full w-full flex items-center transition-opacity duration-200 ${
+              showControls && isRightSide ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <FaFastForward className="text-4xl text-white opacity-70 hover:opacity-100 cursor-pointer" />
           </div>
         </div>
       ) : (
