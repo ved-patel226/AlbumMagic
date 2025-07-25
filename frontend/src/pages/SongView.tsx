@@ -41,11 +41,7 @@ export default function SongView() {
     <div className="flex items-center justify-center h-screen">
       {songInfo ? (
         <div className="text-center">
-          <img
-            src={songInfo.album_cover_url}
-            alt={`Album cover of ${songInfo.track_name}`}
-            className="rounded-full h-50vh object-cover mx-auto"
-          />
+          <img src={songInfo.album_cover_url} />
           <h1 className="text-4xl font-bold mb-4">{songInfo.track_name}</h1>
           <p className="text-xl">{songInfo.artists}</p>
         </div>
