@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AuthRouteWrapper from "./components/AuthRouteWrapper";
+
 import Auth from "./pages/Auth";
 import Callback from "./pages/Callback";
-import AuthRouteWrapper from "./components/AuthRouteWrapper";
+import SongView from "./pages/SongView";
 
 function App() {
   return (
@@ -16,14 +18,7 @@ function AlbumMagicRoutes() {
     <>
       <h1 className="text-4xl font-bold text-center mt-8">albummagic</h1>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <div className="flex items-center justify-center h-screen">
-              <h2 className="text-2xl">Welcome to AlbumMagic!</h2>
-            </div>
-          }
-        />
+        <Route path="/" element={<SongView />} />
         <Route
           path="/auth"
           element={
