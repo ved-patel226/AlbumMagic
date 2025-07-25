@@ -1,6 +1,6 @@
 # Album Magic
 
-### Installiation:
+### Installation:
 
 Installing project on local computer:
 
