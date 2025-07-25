@@ -10,7 +10,7 @@ Before installing, ensure you have the following installed on your system:
 
 You will also need a [Spotify Developer Account](https://developer.spotify.com/dashboard/) to obtain API credentials.
 
-### Installation:
+## Installation:
 
 Installing project on local computer:
 
