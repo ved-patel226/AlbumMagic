@@ -15,7 +15,6 @@ pub struct CurrentTrack {
 }
 
 pub async fn get_current_track(spotify: &AuthCodeSpotify) -> Result<CurrentTrack> {
-    // Get currently playing track
     match spotify.current_playing(None, None::<Vec<_>>).await? {
         Some(playing) => {
             match playing.item {

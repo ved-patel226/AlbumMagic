@@ -79,20 +79,3 @@ async fn cache_token(spotify: &AuthCodeSpotify) -> Result<(), Box<dyn std::error
     }
     Ok(())
 }
-
-// Legacy function - kept for backward compatibility if needed
-pub async fn get_spotify_client() -> Result<AuthCodeSpotify, Box<dyn std::error::Error>> {
-    let creds = Credentials::from_env().ok_or(
-        "Failed to load Spotify credentials from environment"
-    )?;
-    let oauth = OAuth::from_env(scopes!("user-read-currently-playing")).ok_or(
-        "Failed to load OAuth config from environment"
-    )?;
-    let spotify = AuthCodeSpotify::new(creds, oauth);
-
-    if try_load_cached_token(&spotify).await? {
-        return Ok(spotify);
-    }
-
-    Err("Authentication required".into())
-}

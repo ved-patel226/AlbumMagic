@@ -7,13 +7,13 @@ use axum::extract::Query;
 
 use crate::albummagic::{ player::get_current_track, spotify_client::SpotifyClientManager };
 
-// Response types
 #[derive(Serialize)]
 pub struct AuthResponse {
     pub auth_url: String,
 }
 
 #[derive(Deserialize)]
+#[allow(dead_code)]
 pub struct CallbackRequest {
     pub code: String,
     pub state: Option<String>,
@@ -30,7 +30,6 @@ pub struct ErrorResponse {
     pub error: String,
 }
 
-// Application state
 pub type AppState = Arc<Mutex<SpotifyClientManager>>;
 
 pub fn create_app(spotify_manager: AppState) -> Router {
@@ -42,7 +41,6 @@ pub fn create_app(spotify_manager: AppState) -> Router {
         .layer(CorsLayer::permissive())
 }
 
-// Route handlers
 async fn get_auth_url(State(spotify_manager): State<AppState>) -> Result<
     Json<AuthResponse>,
     (StatusCode, Json<ErrorResponse>)
@@ -90,6 +88,7 @@ async fn get_current_song(State(spotify_manager): State<AppState>) -> Result<
     }
 }
 
+// Input: Json { code: String, state: String } (both returned by Spotify after user authentication)
 async fn handle_callback(
     State(spotify_manager): State<AppState>,
     Json(params): Json<CallbackRequest>
