@@ -1,7 +1,8 @@
 use rspotify::{ model::PlayableItem, prelude::*, AuthCodeSpotify };
 use anyhow::Result;
+use serde::Serialize;
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 #[allow(dead_code)]
 pub struct CurrentTrack {
     pub track_name: String,
