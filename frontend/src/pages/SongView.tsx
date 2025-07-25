@@ -41,12 +41,20 @@ export default function SongView() {
     <div className="flex items-center justify-center h-screen">
       {songInfo ? (
         <div className="text-center">
-          <img
-            src={songInfo.album_cover_url}
-            className="w-64 h-64 rounded-full object-cover mx-auto mb-6"
-          />
-          <h1 className="text-4xl font-bold mb-4">{songInfo.track_name}</h1>
-          <p className="text-xl">{songInfo.artists}</p>
+          <div className="flex flex-col items-center justify-center mb-6 perspective-dramatic">
+            <img
+              src={songInfo.album_cover_url}
+              alt={`${songInfo.track_name} cover`}
+              className="w-50vh  rounded-lg object-cover -rotate-y-[-5deg] mb-5"
+            />
+
+            <h1 className="text-4xl font-bold mb-4 -rotate-y-[-5deg]">
+              {songInfo.track_name}
+            </h1>
+            <p className="text-xl -rotate-y-[-5deg]">
+              {songInfo.artists.join(", ")}
+            </p>
+          </div>
         </div>
       ) : (
         <h1 className="text-4xl font-bold">No song playing</h1>

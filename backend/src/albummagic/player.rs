@@ -21,10 +21,11 @@ pub async fn get_current_track(spotify: &AuthCodeSpotify) -> Result<CurrentTrack
                 Some(PlayableItem::Track(track)) => {
                     let current_track = CurrentTrack {
                         track_name: track.name.clone(),
-                        album_cover_url: track.album.images
-                            .first()
-                            .map(|img| img.url.clone())
-                            .unwrap_or_default(), // NOT type image::DynamicImage, will do that in frontend
+                        album_cover_url: {
+                            track.album.images
+                                .first()
+                                .map_or_else(String::new, |img| img.url.clone())
+                        },
                         artists: track.artists
                             .iter()
                             .map(|a| a.name.clone())

@@ -16,7 +16,6 @@ function App() {
 function AlbumMagicRoutes() {
   return (
     <>
-      <h1 className="text-4xl font-bold text-center mt-8">albummagic</h1>
       <Routes>
         <Route path="/" element={<SongView />} />
         <Route
